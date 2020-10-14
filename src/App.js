@@ -1,11 +1,25 @@
 import React from 'react'
-import { Grommet, Box, Button, Heading, Collapsible, ResponsiveContext, Layer } from 'grommet'
-import { SettingsOption, Favorite, FormClose } from 'grommet-icons'
+import { Grommet, Box, Button, Heading, Collapsible, ResponsiveContext, Layer, Main, Text } from 'grommet'
+import { SettingsOption, Favorite, FormClose, Close, Send, User, Refresh, ShareOption } from 'grommet-icons'
 import AppBar from './AppBar'
+import { quotes } from './quotes.json'
+import Storage from './Storage'
 
 function App() {
   const [showSettings, setShowSettings] = React.useState(false)
   const [showFavorites, setShowFavorites] = React.useState(false)
+  const [quoteIndex, setQuoteIndex] = React.useState(Storage.getQuoteIndex())
+
+  const moveNext = () => {
+    let start = 0
+    let end = quotes.length - 1
+    
+    let index = Math.floor(Math.random() * end) + start
+
+    index = Storage.getNextIfSeen(index)
+
+    setQuoteIndex(index)
+  }
 
   return (
     <div className="App">
@@ -57,7 +71,21 @@ function App() {
                       </Box>
                     </Layer>
                   )}
-                <Box flex align='center' justify='center'>app body</Box>
+
+                <Main flex align='center' justify='between' pad="large">
+                  <Box>
+                    {console.log(quotes[quoteIndex])}
+                    <Text size="28pt">{quotes[quoteIndex]}</Text>
+                  </Box>
+                  <Box>
+                    <Box direction="row" justify="start">
+                      <Button plain={false} icon={<Refresh />} onClick={() => moveNext()} primary margin="small" />
+                      <Button plain={false} icon={<Favorite />} onClick={() => { }} primary margin="small" />
+                      <Button plain={false} icon={<ShareOption />} onClick={() => { }} primary margin="small" />
+                    </Box>
+                  </Box>
+                </Main>
+
                 {(!showSettings || size !== 'small') ? (
                   <Collapsible direction="horizontal" open={showSettings}>
                     <Box
