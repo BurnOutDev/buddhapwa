@@ -1,0 +1,1 @@
+This project was inspired from Android app - [Buddha Quotes](https://gitlab.com/bandev/buddha-quotes)
