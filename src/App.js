@@ -80,7 +80,7 @@ function App() {
                   <Box>
                     <Box direction="row" justify="start">
                       <Button plain={false} icon={<Refresh />} onClick={() => moveNext()} primary margin="small" />
-                      <Button plain={false} icon={<Favorite />} onClick={() => { }} primary margin="small" />
+                      <Button plain={false} icon={<Favorite fill={Storage.isInFavorites(quoteIndex)} />} onClick={() => Storage.addFavorite(quoteIndex)} primary margin="small" />
                       <Button plain={false} icon={<ShareOption />} onClick={() => { }} primary margin="small" />
                     </Box>
                   </Box>

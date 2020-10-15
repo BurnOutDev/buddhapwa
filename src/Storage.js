@@ -1,14 +1,39 @@
 import { quotes } from './quotes.json'
 
-const getFavorites = () => JSON.parse(localStorage.getItem('favorites'))
+const keys = {
+    favorites: 'favorites',
+    quoteIndex: 'quote-index',
+    initialized: 'initialized',
+    seen: 'seen'
+}
 
-const setQuoteIndex = (index) => localStorage.setItem('quote-index', index)
+const getFavorites = () => JSON.parse(localStorage.getItem(keys.favorites))
+
+const setQuoteIndex = (index) => localStorage.setItem(keys.quoteIndex, index)
+
+const initializeStorage = () => {
+    let initialized = localStorage.getItem(keys.initialized)
+
+    if (!initialized) {
+        localStorage.setItem(keys.favorites, '[]')
+        localStorage.setItem(keys.quoteIndex, 0)
+        localStorage.setItem(keys.initialized, true)
+        localStorage.setItem(keys.seen, '[]')
+    }
+}
 
 const addFavorite = (index) => {
-    let favs = [...getFavorites(), index]
+    let favs = getFavorites()
 
-    localStorage.setItem('favorites', JSON.stringify(favs))
+    if (isInFavorites()) {
+
+        favs = [...getFavorites(), index]
+
+        localStorage.setItem(keys.favorites, JSON.stringify(favs))
+    }
 }
+
+const isInFavorites = (index) => getFavorites().includes(index)
 
 const removeFavorite = (index) => {
     let favs = getFavorites()
@@ -19,7 +44,7 @@ const removeFavorite = (index) => {
 }
 
 const getNextIfSeen = (index) => {
-    let seenStr = localStorage.getItem('seen')
+    let seenStr = localStorage.getItem(keys.seen)
     let seenArr = JSON.parse(seenStr)
 
     while (seenArr.includes(index)) {
@@ -36,13 +61,14 @@ const getNextIfSeen = (index) => {
     return index
 }
 
-const getQuoteIndex = () => parseInt(localStorage.getItem('quote-index'))
+const getQuoteIndex = () => parseInt(localStorage.getItem(keys.quoteIndex))
 
-if (!getQuoteIndex()) setQuoteIndex(46)  
+initializeStorage()
 
 export default {
     addFavorite,
     removeFavorite,
     getNextIfSeen,
-    getQuoteIndex
+    getQuoteIndex,
+    isInFavorites
 }
